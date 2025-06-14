@@ -5,5 +5,6 @@ import org.springframework.stereotype.Repository;
 import ru.mephi.mephiotp.model.User;
 
 @Repository
-public interface UserRepository extends JpaRepository<User,Long> {
+public interface UserRepository extends JpaRepository<User, Long> {
+    boolean existsByEmail(String email);
 }
