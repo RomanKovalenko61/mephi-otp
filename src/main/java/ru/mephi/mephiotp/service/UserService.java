@@ -1,5 +1,6 @@
 package ru.mephi.mephiotp.service;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -68,6 +69,11 @@ public class UserService {
         var user = getUserById(id);
         userRepository.deleteById(id);
         return user;
+    }
+
+    public User findByEmail(@NotBlank String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + email));
     }
 
     private UserDto toDto(User user) {

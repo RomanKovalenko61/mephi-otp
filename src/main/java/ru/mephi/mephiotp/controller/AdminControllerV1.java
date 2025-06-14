@@ -1,7 +1,7 @@
 package ru.mephi.mephiotp.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.mephi.mephiotp.dto.UserDto;
@@ -12,21 +12,16 @@ import java.util.List;
 
 @CrossOrigin(origins = "*")
 @RestController
-@RequestMapping("/api/v1/")
-public class UserController {
+@RequestMapping("/api/v1/admin")
+@RequiredArgsConstructor
+public class AdminControllerV1 {
     @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/users")
     public ResponseEntity<List<UserDto>> getAllUsers() {
         List<UserDto> users = userService.getAllUsers();
         return ResponseEntity.ok(users);
-    }
-
-    @PostMapping("/users")
-    public ResponseEntity<UserDto> createUser(@RequestBody User user) {
-        var userDto = userService.createUser(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(userDto);
     }
 
     @GetMapping("/users/{id}")
