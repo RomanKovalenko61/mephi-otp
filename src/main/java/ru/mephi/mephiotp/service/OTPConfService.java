@@ -1,7 +1,6 @@
 package ru.mephi.mephiotp.service;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.mephi.mephiotp.dto.OTPConfDTO;
 import ru.mephi.mephiotp.exception.ResourceNotFoundException;
@@ -11,7 +10,6 @@ import ru.mephi.mephiotp.repository.OTPConfigurationRepository;
 @Service
 @RequiredArgsConstructor
 public class OTPConfService {
-    @Autowired
     private final OTPConfigurationRepository repository;
 
     public OTPConfDTO getOTP() {

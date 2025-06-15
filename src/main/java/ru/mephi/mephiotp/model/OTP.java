@@ -18,22 +18,22 @@ public class OTP {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     private String otpCode;
 
-    @Column
+    @Column(unique = true, nullable = false)
     private Long operationId;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column
+    @Column(nullable = false)
     private LocalDateTime expiresAt;
 
-    @Column
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private OTPStatus status;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private User user;
 }

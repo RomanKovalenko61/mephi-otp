@@ -7,8 +7,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -18,7 +16,6 @@ import ru.mephi.mephiotp.service.JwtService;
 import java.io.IOException;
 
 @Component
-@Order(1)
 @RequiredArgsConstructor
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
@@ -34,10 +31,10 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 if (jwtService.validateToken(token)) {
                     Authentication authentication = jwtService.getAuthentication(token);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
-                };
+                }
             } catch (JwtException e) {
                 request.setAttribute("jwt_exception", e);
-                throw new AuthenticationServiceException("JWT error", e);
+                //throw new AuthenticationServiceException("JWT error", e);
             }
         }
         filterChain.doFilter(request, response);
