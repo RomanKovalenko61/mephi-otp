@@ -38,17 +38,11 @@ public class JwtService {
     }
 
     public boolean validateToken(String token) {
-        try {
-            Key key = Keys.hmacShaKeyFor(jwtSigningKey.getBytes());
-            Jwts.parser()
-                    .setSigningKey(Keys.hmacShaKeyFor(jwtSigningKey.getBytes()))
-                    .build()
-                    .parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-            return false;
-        }
+        Jwts.parser()
+                .setSigningKey(Keys.hmacShaKeyFor(jwtSigningKey.getBytes()))
+                .build()
+                .parseClaimsJws(token);
+        return true;
     }
 
     public Authentication getAuthentication(String token) {

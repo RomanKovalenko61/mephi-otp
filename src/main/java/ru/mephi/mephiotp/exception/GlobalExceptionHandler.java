@@ -23,4 +23,11 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(Map.of("error", ex.getMessage()));
     }
+
+    @ExceptionHandler(RegisterEmptyFieldException.class)
+    public ResponseEntity<Map<String, String>> handleRegisterEmptyField(RegisterEmptyFieldException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(Map.of("error", ex.getMessage()));
+    }
 }

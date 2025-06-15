@@ -1,5 +1,6 @@
 package ru.mephi.mephiotp.filter;
 
+import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -7,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -28,9 +30,14 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
         String header = request.getHeader("Authorization");
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
-            if (jwtService.validateToken(token)) {
-                Authentication authentication = jwtService.getAuthentication(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+                if (jwtService.validateToken(token)) {
+                    Authentication authentication = jwtService.getAuthentication(token);
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                };
+            } catch (JwtException e) {
+                request.setAttribute("jwt_exception", e);
+                throw new AuthenticationServiceException("JWT error", e);
             }
         }
         filterChain.doFilter(request, response);

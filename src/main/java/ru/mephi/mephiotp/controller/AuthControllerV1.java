@@ -11,6 +11,7 @@ import ru.mephi.mephiotp.dto.SignInRequest;
 import ru.mephi.mephiotp.dto.SignUpRequest;
 import ru.mephi.mephiotp.dto.UserDto;
 import ru.mephi.mephiotp.exception.AdminAlreadyExistsException;
+import ru.mephi.mephiotp.exception.RegisterEmptyFieldException;
 import ru.mephi.mephiotp.exception.ResourceNotFoundException;
 import ru.mephi.mephiotp.model.User;
 import ru.mephi.mephiotp.service.JwtService;
@@ -33,12 +34,17 @@ public class AuthControllerV1 {
     @PostMapping("/register")
     public ResponseEntity<UserDto> register(@RequestBody SignUpRequest request) {
         if (request.getRole().toString().equals("ADMIN")) {
-            boolean exists = userService.getAllUsers().stream()
+            boolean exists = userService.getAllAdmins().stream()
                     .anyMatch(user -> user.getRole().equals("ADMIN"));
             if (exists) {
                 throw new AdminAlreadyExistsException("Admin already exists");
             }
         }
+
+        if (request.getUsername() == null || request.getPassword() == null || request.getEmail() == null || request.getRole() == null) {
+            throw new RegisterEmptyFieldException("Все поля обязательны для заполнения (username, password, email, role)");
+        }
+
         User user = User.builder()
                 .username(request.getUsername())
                 .password(request.getPassword())

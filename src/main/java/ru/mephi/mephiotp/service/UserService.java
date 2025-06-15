@@ -22,8 +22,12 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public List<UserDto> getAllUsers() {
-        return userRepository.findAll().stream().map(this::toDto).collect(Collectors.toList());
+    public List<UserDto> getAllAdmins() {
+        return userRepository.findAll().stream().filter(user -> user.getRole().name().equals("ADMIN")).map(this::toDto).collect(Collectors.toList());
+    }
+
+    public List<UserDto> getAllUsersWithoutAdmins() {
+        return userRepository.findAll().stream().filter(user -> !user.getRole().name().equals("ADMIN")).map(this::toDto).collect(Collectors.toList());
     }
 
     public UserDto createUser(User user) {
