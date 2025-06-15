@@ -37,12 +37,14 @@ public class OTPControllerV1 {
         return ResponseEntity.ok(Map.of("status", status.name()));
     }
 
+    @RequestMapping("/api/v1/admin")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOTP(@PathVariable Long id) {
         var result = otpService.delete(id);
         return ResponseEntity.ok(Map.of("deleted: ", result));
     }
 
+    @RequestMapping("/api/v1/admin")
     @GetMapping("/{id}")
     public ResponseEntity<OTPDto> getOTPById(@PathVariable Long id) {
         var otpDto = otpService.getById(id);
