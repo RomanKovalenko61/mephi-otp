@@ -16,6 +16,7 @@ import java.nio.file.StandardOpenOption;
 public class NotificationService {
 
     private final EmailNotificationService emailService;
+    private final SmsNotificationService smsService;
 
     public void sendCodeToEmail(User user, String code) {
         if (user.getEmail() != null) {
@@ -34,5 +35,9 @@ public class NotificationService {
         } catch (IOException e) {
             log.error("IN saveCodeToFile - error: {}", e.getMessage());
         }
+    }
+
+    public void sendCodeToSms(User user, String code) {
+        smsService.sendCode(user.getUsername(), code);
     }
 }

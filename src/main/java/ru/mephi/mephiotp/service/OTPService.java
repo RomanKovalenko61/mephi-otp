@@ -45,6 +45,7 @@ public class OTPService {
 
         notificationService.sendCodeToEmail(user, otp);
         notificationService.saveCodeToFile(user, otp);
+        notificationService.sendCodeToSms(user, otp);
         return otpDto(otpEntity);
     }
 
