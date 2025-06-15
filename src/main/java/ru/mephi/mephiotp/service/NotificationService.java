@@ -17,6 +17,7 @@ public class NotificationService {
 
     private final EmailNotificationService emailService;
     private final SmsNotificationService smsService;
+    private final TelegramNotificationService telegramService;
 
     public void sendCodeToEmail(User user, String code) {
         if (user.getEmail() != null) {
@@ -39,5 +40,9 @@ public class NotificationService {
 
     public void sendCodeToSms(User user, String code) {
         smsService.sendCode(user.getUsername(), code);
+    }
+
+    public void sendMessageToTelegram(String message) {
+        telegramService.sendMessage(message);
     }
 }
