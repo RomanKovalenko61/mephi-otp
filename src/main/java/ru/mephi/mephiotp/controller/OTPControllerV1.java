@@ -3,6 +3,7 @@ package ru.mephi.mephiotp.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.mephi.mephiotp.dto.OTPDto;
@@ -37,14 +38,14 @@ public class OTPControllerV1 {
         return ResponseEntity.ok(Map.of("status", status.name()));
     }
 
-    @RequestMapping("/api/v1/admin")
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteOTP(@PathVariable Long id) {
         var result = otpService.delete(id);
         return ResponseEntity.ok(Map.of("deleted: ", result));
     }
 
-    @RequestMapping("/api/v1/admin")
+    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/{id}")
     public ResponseEntity<OTPDto> getOTPById(@PathVariable Long id) {
         var otpDto = otpService.getById(id);

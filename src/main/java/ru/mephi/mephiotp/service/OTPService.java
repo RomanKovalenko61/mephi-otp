@@ -20,6 +20,7 @@ public class OTPService {
     private final OTPRepository OTPrepository;
     private final UserRepository userRepository;
     private final OTPConfigurationRepository OTPConfigurationRepository;
+    private final NotificationService notificationService;
 
     @Transactional
     public OTPDto create(Long userId, Long operationId) {
@@ -41,6 +42,9 @@ public class OTPService {
                 .user(user)
                 .build();
         OTPrepository.save(otpEntity);
+
+        notificationService.sendCodeToEmail(user, otp);
+        notificationService.saveCodeToFile(user, otp);
         return otpDto(otpEntity);
     }
 
