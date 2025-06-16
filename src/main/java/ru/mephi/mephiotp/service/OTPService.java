@@ -60,6 +60,7 @@ public class OTPService {
         }
         if (otpEntity.getExpiresAt().isBefore(LocalDateTime.now())) {
             otpEntity.setStatus(OTPStatus.EXPIRED);
+            OTPrepository.save(otpEntity);
             return OTPCheck.EXPIRED;
         }
         otpEntity.setStatus(OTPStatus.USED);

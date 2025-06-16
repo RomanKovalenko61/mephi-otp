@@ -6,6 +6,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +18,7 @@ import java.io.IOException;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private final JwtService jwtService;
@@ -31,9 +33,11 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 if (jwtService.validateToken(token)) {
                     Authentication authentication = jwtService.getAuthentication(token);
                     SecurityContextHolder.getContext().setAuthentication(authentication);
+                    log.info("JWT token is valid, user authenticated: {}", authentication.getName());
                 }
             } catch (JwtException e) {
                 request.setAttribute("jwt_exception", e);
+                log.error("JWT error: {}", e.getMessage());
                 //throw new AuthenticationServiceException("JWT error", e);
             }
         }

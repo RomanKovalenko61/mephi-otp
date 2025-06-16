@@ -4,6 +4,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
@@ -27,6 +29,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         } else if (cause instanceof JwtException) {
             message = "Некорректный токен";
         }
+        log.warn(message + ": {}", cause != null ? cause.getMessage() : authException.getMessage());
         response.getWriter().write("{\"error\": \"" + message + "\"}");
     }
 }
